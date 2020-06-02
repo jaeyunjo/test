@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 
 public class AccountContext extends User {
 
-    @Getter
     private Account account;
 
     public AccountContext(String email, String password, String role) {
