@@ -1,0 +1,63 @@
+buildscript {
+    // ext: build.gradle에서 사용하는 전역변수를 설정하겠다는 키워드
+    ext {
+        springBootVersion = '2.1.7.RELEASE'
+        swaggerVersion = '2.9.2'
+        lombokVersion = '1.18.10'
+        jwtVersion = '3.8.3'
+    }
+    repositories {
+        // 기본적으로 mavenCentral을 사용하지만, 본인이 만든 라이브러리를 업로드하기 위해 많은 과정과 설정이 필요하다.
+        mavenCentral()
+        // 최근에 나온 jcenter는 이러한 문제점을 개선하여 라이브러리 업로드를 간단하게하고 mavenCentral에
+        // 업로드 할 수 있도록 자동화를 할 수 있다.(점점 jcenter로 옮겨가는 추세지만 둘다 등록함)
+        jcenter()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+// 자바와 스프링 부트를 사용하기 위한 필수 플러그인들을 apply
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+group 'com.sns'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation('org.springframework.boot:spring-boot-starter-data-jpa')
+    implementation('mysql:mysql-connector-java')
+
+    compile('org.springframework.boot:spring-boot-starter-web')
+    compile(group: 'io.springfox', name: 'springfox-swagger2', version: "${swaggerVersion}")
+    compile(group: 'io.springfox', name: 'springfox-swagger-ui', version: "${swaggerVersion}")
+    compile('org.springframework.boot:spring-boot-starter-security')
+    compile('org.springframework.security.oauth:spring-security-oauth2:2.3.4.RELEASE')
+    compile group: 'org.springframework.security', name: 'spring-security-jwt', version: '1.0.9.RELEASE'
+
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+    // https://mvnrepository.com/artifact/com.auth0/java-jwt
+//    compile group: 'com.auth0', name: 'java-jwt', version: "${jwtVersion}"
+
+
+    runtimeOnly group: 'com.h2database', name: 'h2', version: '1.4.196'
+
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+
+tasks.withType(Test) {
+    scanForTestClasses = false
+    include "**/*Test.class"
+}

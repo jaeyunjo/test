@@ -1,0 +1,41 @@
+spring:
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE}
+---
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  profiles: local
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3305/taggare?charcaterEncoding=UTF-8&serverTimezone=UTC
+    username: root
+    password:
+  jpa:
+    generate-ddl: true
+    show-sql: true
+logging:
+  level:
+    com:
+      sns:
+        server: debug
+server:
+  port: 8086
+---
+# prod
+spring:
+  profiles: prod
+  datasource:
+    driver-class-name: ${DRIVER_CLASSNAME}
+    url: ${DB_HOSTNAME}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    generate-ddl: true
+    show-sql: true
+
+logging:
+  level:
+    com:
+      sns:
+        server: info
